@@ -40,7 +40,11 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys("Buy peacock feathers")
 
         # pressing enter they are stored
+        # the site takes her to the url of her list
+        # and shows the first item
         inputbox.send_keys(Keys.ENTER)
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1 : Buy peacock feathers')
 
         # the user sees this as the page is automatically updated and is immediately invited to do another one
@@ -55,9 +59,34 @@ class NewVisitorTest(LiveServerTestCase):
         self.check_for_row_in_list_table('2 : Use peacock feathers to make a fly')
 
 
-        # The user expects the items to be stored. A unique url makes sure they are retrievable
-        self.fail("Finish the test!")
+        # now good old buddy Francis comes along
 
-        # she visits that url - her list is still there
+        # We use a new browser session to make sure no information from Edith is still there
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
 
-        # then she quietly walks away and leaves
+        # As hoped, there is noe information from Edith
+        # as Francis treads his first steps into the site
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_elements_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertNotIn('make a fly')
+
+        # Francis enters a new item
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy milk')
+        inputbox.send_keys(Keys.ENTER)
+
+        # Francis gets what he deserves, his own url
+        francis_list_url = self.browser.current_url
+        self.assertRegex(francis_list_url, '/lists/.+')
+        self.assertNotEqual(francis_list_url,edith_list_url)
+
+        # Again, no trace of Ediths existence is there
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Buy milk', page_text)
+        self.assertNotIn('Buy peacock feathers', page_text)
+
+        self.fail("Finish the test!", page_text)
+
+        # satisfied they both go back to sleep
