@@ -4,6 +4,7 @@ from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
+from time import sleep
 
 
 class NewVisitorTest(LiveServerTestCase):
@@ -55,9 +56,8 @@ class NewVisitorTest(LiveServerTestCase):
         # each time you add one and press enter this is visible
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.check_for_row_in_list_table('1 : Buy peacock feathers')
         self.check_for_row_in_list_table('2 : Use peacock feathers to make a fly')
-
+        self.check_for_row_in_list_table('1 : Buy peacock feathers')
 
         # now good old buddy Francis comes along
 
@@ -68,9 +68,9 @@ class NewVisitorTest(LiveServerTestCase):
         # As hoped, there is noe information from Edith
         # as Francis treads his first steps into the site
         self.browser.get(self.live_server_url)
-        page_text = self.browser.find_elements_by_tag_name('body').text
+        page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
-        self.assertNotIn('make a fly')
+        self.assertNotIn('make a fly', page_text)
 
         # Francis enters a new item
         inputbox = self.browser.find_element_by_id('id_new_item')
@@ -86,7 +86,5 @@ class NewVisitorTest(LiveServerTestCase):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('Buy milk', page_text)
         self.assertNotIn('Buy peacock feathers', page_text)
-
-        self.fail("Finish the test!", page_text)
 
         # satisfied they both go back to sleep
