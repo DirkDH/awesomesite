@@ -1,13 +1,13 @@
 __author__ = 'ddehertog'
 
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
 from time import sleep
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -89,7 +89,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         # satisfied they both go back to sleep
 
-    def test_layout_and_stylingl(self):
+    def test_layout_and_styling(self):
         # Edith goes to the home page
         self.browser.get(self.live_server_url)
         self.browser.set_window_size(1024, 768)
