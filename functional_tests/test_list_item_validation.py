@@ -15,11 +15,11 @@ class ItemValidationTest(FunctionalTest):
         self.assertEqual(error.text, "You can't have an empty list item")
 
         # Now she tries again with some text and it works
-        self.browser.find_element_by_css_selector('id_new_item').send_keys('Buy milk\n')
+        self.browser.find_element_by_id('id_new_item').send_keys('Buy milk\n')
         self.check_for_row_in_list_table('1: Buy milk')
 
         # She persists in her devilish ways and tries to submit another blank
-        self.browser.find_element_by_css_selector('id_new_item').send_keys('\n')
+        self.browser.find_element_by_id('id_new_item').send_keys('\n')
 
 
         # The system remains calm and quietly gives the same error message
