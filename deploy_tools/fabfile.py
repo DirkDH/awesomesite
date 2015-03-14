@@ -11,6 +11,7 @@ REPO_URL = 'https://github.com/dirkDH/awesomesite.git'
 def deploy():
     site_folder = '/home/%s/sites/%s' % (env.user, env.host)
     source_folder = site_folder + '/source'
+    env.key_filename = '/Users/ddehertog/Documents/hertodi.pem'
     _create_directory_structure_if_necessary(site_folder)
     _get_latest_source(source_folder)
     _update_settings(source_folder, env.host)
